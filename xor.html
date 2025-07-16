@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>XOR Encrypter</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #2d2d44);
+      color: #f4f4f4;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+      color: #ffd700;
+    }
+
+    input, select {
+      width: 300px;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #3b3b54;
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #00aaff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0088cc;
+    }
+
+    pre {
+      background-color: #262638;
+      padding: 20px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>XOR Encrypter</h2>
+
+  <label>Input Text:</label>
+  <input type="text" id="input" placeholder="Enter text">
+
+  <label>Key:</label>
+  <input type="text" id="key" placeholder="Enter key">
+
+  <label>Format:</label>
+  <select id="format">
+    <option value="hex">\\x (escaped)</option>
+    <option value="single">\x (literal)</option>
+    <option value="raw">Raw characters</option>
+  </select>
+
+  <button onclick="encrypt()">Encrypt</button>
+
+  <h3>Encrypted Output:</h3>
+  <pre id="output"></pre>
+
+  <script>
+    function xorEncrypt(str, key, format) {
+      let result = "";
+      for (let i = 0; i < str.length; i++) {
+        const xorCode = str.charCodeAt(i) ^ key.charCodeAt(i % key.length);
+        const hex = xorCode.toString(16).padStart(2, "0");
+        if (format === "hex") {
+          result += "\\\\x" + hex;
+        } else if (format === "single") {
+          result += "\\x" + hex;
+        } else {
+          result += String.fromCharCode(xorCode);
+        }
+      }
+      return result;
+    }
+
+    function encrypt() {
+      const input = document.getElementById("input").value;
+      const key = document.getElementById("key").value;
+      const format = document.getElementById("format").value;
+
+      const output = xorEncrypt(input, key, format);
+      document.getElementById("output").textContent = output;
+    }
+  </script>
+</body>
+</html>
